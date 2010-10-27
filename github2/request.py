@@ -60,9 +60,9 @@ class GithubRequest(object):
         post_data.update(extra_post_data) 
         return urlencode(post_data)
 
-    def get(self, *path_components):
+    def get(self, *path_components,**extra_get_data):
         path_components = filter(None, path_components)
-        return self.make_request("/".join(path_components))
+        return self.make_request("/".join(path_components),extra_post_data=extra_get_data)
 
     def post(self, *path_components, **extra_post_data):
         path_components = filter(None, path_components)
@@ -95,12 +95,14 @@ class GithubRequest(object):
         headers = self.http_headers
         headers["Accept"] = "text/html"
         method = method.upper()
-        if extra_post_data or method == "POST":
+        if  method == "POST":
             post_data = self.encode_authentication_data(extra_post_data)
             headers["Content-Length"] = str(len(post_data))
         else:
+            query_dict=  parse_qs(query)
+            query_dict.update(extra_post_data)
             path = urlunparse((scheme, netloc, path, params,
-                self.encode_authentication_data(parse_qs(query)),
+                self.encode_authentication_data(query_dict),
                 fragment))
         connector = self.connector_for_scheme[scheme]
         connection = connector(hostname)

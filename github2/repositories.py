@@ -20,8 +20,8 @@ class Repository(BaseData):
 class Repositories(GithubCommand):
     domain = "repos"
 
-    def search(self, query):
-        return self.make_request("search", query, filter="repositories")
+    def search(self, query,page=1):
+        return self.make_request("search", query, filter="repositories",get_data = {'start_page':page})
 
     def show(self, project):
         return self.get_value("show", project, filter="repository",

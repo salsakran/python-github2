@@ -35,12 +35,13 @@ class GithubCommand(object):
     def make_request(self, command, *args, **kwargs):
         filter = kwargs.get("filter")
         post_data = kwargs.get("post_data") or {}
+        get_data = kwargs.get("get_data") or {}
         method = kwargs.get("method", "GET")
         if post_data or method.upper() == "POST":
             response = self.request.post(self.domain, command, *args,
                                          **post_data)
         else:
-            response = self.request.get(self.domain, command, *args)
+            response = self.request.get(self.domain, command, *args,**get_data)
         if filter:
             return response[filter]
         return response
