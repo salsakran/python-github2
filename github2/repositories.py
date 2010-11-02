@@ -1,5 +1,5 @@
 from github2.core import BaseData, GithubCommand, Attribute
-
+import urllib
 
 class Repository(BaseData):
     name = Attribute("Name of repository.")
@@ -21,7 +21,7 @@ class Repositories(GithubCommand):
     domain = "repos"
 
     def search(self, query,page=1):
-        return self.make_request("search", query, filter="repositories",get_data = {'start_page':page})
+        return self.make_request("search",urllib.quote_plus(query), filter="repositories",get_data = {'start_page':page})
 
     def show(self, project):
         return self.get_value("show", project, filter="repository",
