@@ -26,9 +26,9 @@ class Commit(BaseData):
 class Commits(GithubCommand):
     domain = "commits"
 
-    def list(self, project, branch="master", file=None):
+    def list(self, project, branch="master", file=None,page=1):
         return self.get_values("list", project, branch, file,
-                               filter="commits", datatype=Commit)
+                               filter="commits", datatype=Commit, get_data = {'page':page})
 
     def show(self, project, sha):
         return self.get_value("show", project, sha,
