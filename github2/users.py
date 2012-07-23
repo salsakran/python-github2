@@ -55,10 +55,10 @@ class Users(GithubCommand):
 
 class LegacySearch(GithubCommand):
     domain = 'legacy'
-    def user(self, query):
+    def user(self, query,page=1):
         return self.get_values("user/search", urllib.quote_plus(query), filter="users", datatype=User)
 
-    def user_by_email(self, query):
+    def user_by_email(self, query,page=1):
         return self.get_value("user/email", query, filter="user", datatype=User)
-    def repo(self, query):
-        return self.get_values("repos/search", urllib.quote_plus(query), filter="repositories", datatype=Repository)
+    def repo(self, query,page=1):
+        return self.get_values("repos/search", urllib.quote_plus(query), filter="repositories", datatype=Repository,get_data = {'start_page':page})

@@ -50,6 +50,7 @@ class UserAPI(unittest.TestCase):
         print res
         self.assertNotEqual(res, None)
 
+
 class RepoAPI(unittest.TestCase):
     """
         test apis for repos
