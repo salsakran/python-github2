@@ -107,7 +107,6 @@ class GithubRequest(object):
                 fragment))
         connector = self.connector_for_scheme[scheme]
         connection = connector(hostname)
-        print path
         connection.request(method, path, post_data, headers)
         response = connection.getresponse()
         response_text = response.read()

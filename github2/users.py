@@ -61,4 +61,4 @@ class LegacySearch(GithubCommand):
     def user_by_email(self, query,page=1):
         return self.get_value("user/email", query, filter="user", datatype=User)
     def repo(self, query,page=1):
-        return self.get_values("repos/search", urllib.quote_plus(query), filter="repositories", datatype=Repository,get_data = {'start_page':page})
+        return self.get_values("repos/search", urllib.quote_plus(query), filter="repositories", get_data = {'start_page':page})
