@@ -24,8 +24,7 @@ class Repositories(GithubCommand):
         return self.make_request("search",urllib.quote_plus(query), filter="repositories",get_data = {'start_page':page})
 
     def show(self, project):
-        return self.get_value("show", project, filter="repository",
-                              datatype=Repository)
+        return self.get_value("", project, datatype=Repository)
 
     def list(self, for_user=None):
         """Return a list of all repositories for a user.
@@ -64,8 +63,7 @@ class Repositories(GithubCommand):
 
     def list_collaborators(self, project):
         """Lists all the collaborators in a project (user/repro)."""
-        return self.make_request("show", project, "collaborators",
-                                 filter="collaborators")
+        return self.make_request("", project, "collaborators")
 
     def add_collaborator(self, repo_name, username):
         """Adds an add_collaborator to a repro.
@@ -86,7 +84,7 @@ class Repositories(GithubCommand):
         return self.make_request("show", project, "network", filter="network")
 
     def languages(self, project):
-        return self.make_request("show", project, "languages", filter="languages")
+        return self.make_request("", project, "languages")
     
     def tags(self, project):
         return self.make_request("show", project, "tags", filter="tags")
@@ -107,5 +105,4 @@ class Repositories(GithubCommand):
 
     def list_contributors(self, project):
         """Lists all the contributors in a project (user/repo)."""
-        return self.make_request("show", project, "contributors",
-                           filter="contributors")
+        return self.make_request("", project, "contributors")

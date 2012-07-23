@@ -1,5 +1,6 @@
 from github2.core import BaseData, GithubCommand, Attribute, DateAttribute
 import urllib
+from repositories import Repository
 
 class User(BaseData):
     id = Attribute("The user id")
@@ -31,25 +32,33 @@ class User(BaseData):
 
 
 class Users(GithubCommand):
-    domain = "user"
-
-    def search(self, query):
-        return self.get_values("search", urllib.quote_plus(query), filter="users", datatype=User)
-
-    def search_by_email(self, query):
-        return self.get_value("email", query, filter="user", datatype=User)
+    domain = "users"
 
     def show(self, username):
-        return self.get_value("show", username, filter="user", datatype=User)
+        return self.get_value("", username, datatype=User)
 
     def followers(self, username):
-        return self.make_request("show", username, "followers", filter="users")
+        return self.make_request(username, "followers")
 
     def following(self, username):
-        return self.make_request("show", username, "following", filter="users")
+        return self.make_request(username, "following")
 
     def follow(self, other_user):
         return self.make_request("follow", other_user)
 
     def unfollow(self, other_user):
         return self.make_request("unfollow", other_user)
+    def repos(self, username):
+        return self.make_request(username, "repos")
+    def watching(self,username):
+        return self.make_request(username, "watched")
+
+class LegacySearch(GithubCommand):
+    domain = 'legacy'
+    def user(self, query):
+        return self.get_values("user/search", urllib.quote_plus(query), filter="users", datatype=User)
+
+    def user_by_email(self, query):
+        return self.get_value("user/email", query, filter="user", datatype=User)
+    def repo(self, query):
+        return self.get_values("repos/search", urllib.quote_plus(query), filter="repositories", datatype=Repository)

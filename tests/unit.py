@@ -14,21 +14,68 @@ class ReprTests(unittest.TestCase):
         self.assertEqual(str, type(repr(i)))
 
 
-class RateLimits(unittest.TestCase):
+       
+class UserAPI(unittest.TestCase):
     """
-    How should we handle actual API calls such that tests can run?
-    Perhaps the library should support a ~/.python_github2.conf from which to get the auth?
+        test out the apis for users
     """
-    def test_delays(self):
-        import datetime, time
-        USERNAME=''
-        API_KEY=''
-        client = Github(username=USERNAME, api_token=API_KEY, 
-            requests_per_second=.5)
-        client.users.show('defunkt')
-        start = datetime.datetime.now()
-        client.users.show('mojombo')
-        end = datetime.datetime.now()
-        self.assertGreaterEqual((end-start).total_seconds(), 2.0, 
-            "Expected .5 reqs per second to require a 2 second delay between calls.")
-        
+    def test_get(self):
+        client = Github()
+        res = client.users.show('defunkt')
+        self.assertNotEqual(res, None)
+    
+    def test_serialize(self):
+        client = Github()
+        res = dict(client.users.show('defunkt'))
+        self.assertNotEqual(res, None)
+
+    def test_followers(self):
+        client = Github()
+        res = client.users.followers('defunkt')
+        self.assertNotEqual(res, None)
+        self.assertNotEqual(len(res), 0)
+    def test_following(self):
+        client = Github()
+        res = client.users.following('defunkt')
+        self.assertNotEqual(res, None)
+        self.assertNotEqual(len(res), 0)
+    def test_search_by_email(self):
+        client = Github()
+        res = client.search.user_by_email('chris@github.com')
+        print res
+        self.assertNotEqual(res, None)
+    def test_search_by_name(self):
+        client = Github()
+        res = client.search.user('Wanstrath')
+        print res
+        self.assertNotEqual(res, None)
+
+class RepoAPI(unittest.TestCase):
+    """
+        test apis for repos
+    """
+    def test_search(self):
+        client = Github()
+        res = client.search.repo('rails')
+        self.assertNotEqual(res, None)
+
+    def test_get(self):
+        client = Github()
+        res = client.repos.show('rails/rails')
+        self.assertNotEqual(res, None)
+    def test_languages(self):
+        client = Github()
+        res = client.repos.languages('rails/rails')
+        self.assertNotEqual(res, None)
+    def test_contributors(self):
+        client = Github()
+        res = client.repos.list_contributors('rails/rails')
+        self.assertNotEqual(res, None)
+    def test_user_repos(self):
+        client = Github()
+        res = client.users.repos('rails')
+        self.assertNotEqual(res, None)
+    def test_watching(self):
+        client = Github()
+        res = client.users.watching('defunkt')
+        self.assertNotEqual(res, None)

@@ -11,16 +11,17 @@ except ImportError:
     from cgi import parse_qs
 from urllib import urlencode
 
-GITHUB_URL = "https://github.com"
+GITHUB_URL = "https://api.github.com"
 
-URL_PREFIX = "https://github.com/api/v2/json"
-
+#URL_PREFIX = "https://github.com/api/v2/json"
+URL_PREFIX = "api.github.com/" 
 class GithubError(Exception):
     """An error occured when making a request to the Github API."""
 
 class GithubRequest(object):
     github_url = GITHUB_URL
-    url_format = "%(github_url)s/api/%(api_version)s/%(api_format)s"
+    #url_format = "%(github_url)s/api/%(api_version)s/%(api_format)s"
+    url_format = "%(github_url)s"
     api_version = "v2"
     api_format = "json"
     GithubError = GithubError
@@ -93,7 +94,7 @@ class GithubRequest(object):
         hostname = netloc.split(':')[0]
         post_data = None
         headers = self.http_headers
-        headers["Accept"] = "text/html"
+        headers["Accept"] = "application/json"
         method = method.upper()
         if  method == "POST":
             post_data = self.encode_authentication_data(extra_post_data)
@@ -106,6 +107,7 @@ class GithubRequest(object):
                 fragment))
         connector = self.connector_for_scheme[scheme]
         connection = connector(hostname)
+        print path
         connection.request(method, path, post_data, headers)
         response = connection.getresponse()
         response_text = response.read()
@@ -116,6 +118,10 @@ class GithubRequest(object):
             raise RuntimeError("unexpected response from github.com %d: %r" % (
                                response.status, response_text))
         json = simplejson.loads(response_text)
+
+        if type(json) == list:
+            return json
+
         if json.get("error"):
             raise self.GithubError(json["error"][0]["error"])
 

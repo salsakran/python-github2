@@ -1,7 +1,7 @@
 from github2.request import GithubRequest
 from github2.issues import Issues
 from github2.repositories import Repositories
-from github2.users import Users
+from github2.users import Users, LegacySearch
 from github2.commits import Commits
 
 class Github(object):
@@ -33,6 +33,7 @@ class Github(object):
         self.users = Users(self.request)
         self.repos = Repositories(self.request)
         self.commits = Commits(self.request)
+        self.search = LegacySearch(self.request)
 
     def project_for_user_repo(self, user, repo):
         return "/".join([user, repo])
